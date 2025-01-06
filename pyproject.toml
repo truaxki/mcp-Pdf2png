@@ -4,13 +4,18 @@ version = "0.1.0"
 description = "MCP server to convert a PDF to a PNG file."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [ "mcp>=1.2.0", "pdf2image>=1.16.3"]
+dependencies = [
+    "mcp>=1.2.0",
+    "pdf2image>=1.16.3",
+    "tqdm>=4.65.0"
+]
+
 [[project.authors]]
 name = "Kirk Truax"
 email = "kirktruax93@proton.me"
 
 [build-system]
-requires = [ "hatchling",]
+requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project.scripts]
