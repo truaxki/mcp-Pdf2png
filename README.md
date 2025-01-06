@@ -1,48 +1,54 @@
 # PDF to PNG MCP Server
 
-A Model Context Protocol (MCP) server that converts PDF files to PNG images.
+A Model Context Protocol (MCP) server that provides PDF to PNG conversion capabilities. This server allows you to convert PDF documents into PNG images with a simple MCP tool call.
 
-## Features
+## Prerequisites
 
-- Convert PDF files to high-quality PNG images
-- Support for multi-page PDFs
-- Automatic output directory creation
-- Clear success/failure messages
+This server requires the Model Context Protocol (MCP). If you're new to MCP, start by installing the SDK:
+```bash
+uv pip install mcp
+```
+
+Additional requirements:
+- Python 3.10 or higher
+- [uv](https://github.com/astral-sh/uv) package manager
+- poppler (required for pdf2image)
+
+### Installing Poppler
+
+- **Windows**: Download and install from [poppler-windows](https://github.com/oschwartz10612/poppler-windows/releases/)
+- **macOS**: `brew install poppler`
+- **Linux**: `sudo apt-get install poppler-utils`
 
 ## Installation
 
-### Prerequisites
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/truaxki/mcp-Pdf2png.git
+   cd mcp-Pdf2png
+   ```
 
-- Python 3.10 or higher
-- `pdf2image` library (and its dependencies)
-- Poppler (required by pdf2image)
+2. Create and activate a virtual environment:
+   ```bash
+   uv venv
+   # Windows
+   .venv\Scripts\activate
+   # Unix/macOS
+   source .venv/bin/activate
+   ```
 
-### Install via UV
+3. Install the package:
+   ```bash
+   uv pip install -e .
+   ```
 
-```bash
-uv install pdf2png
-```
+## Usage
 
-## Configuration
+### 1. Configure MCP Client
 
-### Claude Desktop Setup
-
-#### Windows
-Edit `%APPDATA%/Claude/claude_desktop_config.json`:
-
-```json
-{
-  "mcpServers": {
-    "pdf2png": {
-      "command": "uvx",
-      "args": ["pdf2png"]
-    }
-  }
-}
-```
-
-#### Development Setup
-For local development, use:
+Add the server configuration to your `claude_desktop_config.json`. The file is typically located in:
+- Windows: `%APPDATA%\Claude Desktop\config\claude_desktop_config.json`
+- macOS/Linux: `~/.config/Claude Desktop/config/claude_desktop_config.json`
 
 ```json
 {
@@ -51,7 +57,7 @@ For local development, use:
       "command": "uv",
       "args": [
         "--directory",
-        "path/to/pdf2png",
+        "/absolute/path/to/mcp-Pdf2png",
         "run",
         "pdf2png"
       ]
@@ -60,71 +66,19 @@ For local development, use:
 }
 ```
 
-## Usage
+Note: Replace `/absolute/path/to/mcp-Pdf2png` with the actual path where you cloned the repository.
 
-The server provides a single tool:
+### 2. Using the Server
 
-### pdf2png
+The server provides a single tool `pdf2png` with these parameters:
+- `read_file_path`: Absolute path to the input PDF file
+- `write_folder_path`: Absolute path to the directory where PNG files should be saved
 
-Converts PDF files to PNG format.
+Output:
+- Each PDF page is converted to a PNG image
+- Files are named `page_1.png`, `page_2.png`, etc.
+- Returns a success message with the conversion count
 
-Required arguments:
-- `read_file_path`: Path to the input PDF file
-- `write_folder_path`: Directory where PNG files will be saved
+## Contributing
 
-Example usage in Claude:
-```
-Please convert my PDF file to PNG:
-PDF Location: C:\Users\example\document.pdf
-Output Directory: C:\Users\example\output
-```
-
-## Development
-
-### Local Setup
-
-1. Clone the repository:
-```bash
-git clone [repository-url]
-cd pdf2png
-```
-
-2. Create and activate virtual environment:
-```bash
-uv venv
-source .venv/bin/activate  # Unix
-.venv\Scripts\activate     # Windows
-```
-
-3. Install dependencies:
-```bash
-uv sync
-```
-
-### Testing
-
-Launch the MCP Inspector for debugging:
-```bash
-npx @modelcontextprotocol/inspector uv --directory . run pdf2png
-```
-
-### Building and Publishing
-
-1. Update dependencies:
-```bash
-uv sync
-```
-
-2. Build package:
-```bash
-uv build
-```
-
-3. Publish to PyPI:
-```bash
-uv publish
-```
-
-## License
-
-[Insert License Information]
+Contributions are welcome! Please feel free to submit a Pull Request.
